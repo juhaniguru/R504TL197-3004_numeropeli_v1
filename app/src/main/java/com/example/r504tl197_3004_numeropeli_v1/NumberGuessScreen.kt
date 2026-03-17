@@ -32,12 +32,19 @@ fun NumberGuessScreenRoot(modifier: Modifier = Modifier) {
         state.value = state.value.copy(correctNumber = Random.nextInt(1, 101))
     }
 
-    NumberGuessScreen(state = state.value)
+    NumberGuessScreen(state = state.value, updateText = { newText ->
+        Log.d("juhanitestaa", newText)
+        state.value = state.value.copy(number = newText)
+    })
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NumberGuessScreen(modifier: Modifier = Modifier, state: NumberGuessState) {
+fun NumberGuessScreen(
+    modifier: Modifier = Modifier,
+    state: NumberGuessState,
+    updateText: (String) -> Unit
+) {
 
     Scaffold(topBar = {
         TopAppBar(title = {
@@ -56,7 +63,8 @@ fun NumberGuessScreen(modifier: Modifier = Modifier, state: NumberGuessState) {
             ) {
 
                 TextField(value = state.number, onValueChange = { newText ->
-                    Log.d("juhanitestaa", newText)
+
+                    updateText(newText)
                 })
 
                 Button(onClick = {}) {
@@ -67,7 +75,7 @@ fun NumberGuessScreen(modifier: Modifier = Modifier, state: NumberGuessState) {
 
                 Button(onClick = {}) {
                     Text("Uusi peli")
-                    // TODO: muista lisätä tähän callback
+
                 }
 
             }
@@ -80,6 +88,6 @@ fun NumberGuessScreen(modifier: Modifier = Modifier, state: NumberGuessState) {
 @Composable
 private fun NumberGuessScreenPreview() {
     R504TL1973004_numeropeli_v1Theme {
-        NumberGuessScreen(state = NumberGuessState())
+        NumberGuessScreen(state = NumberGuessState(), updateText = {})
     }
 }
