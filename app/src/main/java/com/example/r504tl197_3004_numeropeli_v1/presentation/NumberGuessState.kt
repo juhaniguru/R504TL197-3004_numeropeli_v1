@@ -1,4 +1,4 @@
-package com.example.r504tl197_3004_numeropeli_v1
+package com.example.r504tl197_3004_numeropeli_v1.presentation
 
 data class NumberGuessState(
     // tämä on käyttäjän syöttämä numero
