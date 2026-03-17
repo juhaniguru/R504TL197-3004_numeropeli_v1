@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.r504tl197_3004_numeropeli_v1.ui.theme.R504TL1973004_numeropeli_v1Theme
+import java.lang.Exception
 import kotlin.random.Random
 
 @Composable
@@ -32,18 +33,62 @@ fun NumberGuessScreenRoot(modifier: Modifier = Modifier) {
         state.value = state.value.copy(correctNumber = Random.nextInt(1, 101))
     }
 
+    fun onGuess() {
+        try {
+            val numberInt = state.value.number.toInt()
+            if (numberInt == state.value.correctNumber) {
+                state.value = state.value.copy(
+                    correct = true,
+                    guessText = "Arvasit oikein, siihen meni ${state.value.timesGuessed + 1} kertaa"
+                )
+            } else {
+                var text = "Arvasit väärin"
+                if (numberInt > state.value.correctNumber) {
+                    text += ", arvauksesi on liian suuri"
+                } else {
+                    text += ", arvauksesi on liian pieni"
+                }
+
+                state.value = state.value.copy(guessText = text, correct = false)
+
+            }
+
+            state.value = state.value.copy(timesGuessed = state.value.timesGuessed + 1)
+        } catch (e: Exception) {
+
+        }
+    }
+
     NumberGuessScreen(state = state.value, updateText = { newText ->
-        Log.d("juhanitestaa", newText)
+
         state.value = state.value.copy(number = newText)
+    }, onGuess = {
+        onGuess()
+    }, onNewGame = {
+        state.value = state.value.copy(
+            guessText = "",
+            correct = false,
+            number = "",
+            timesGuessed = 0,
+            correctNumber = Random.nextInt(1, 101)
+        )
     })
+
+
 }
+
+// ViewModel
+
+// MVVM => ModelView ViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NumberGuessScreen(
     modifier: Modifier = Modifier,
     state: NumberGuessState,
-    updateText: (String) -> Unit
+    updateText: (String) -> Unit,
+    onGuess: () -> Unit,
+    onNewGame: () -> Unit
 ) {
 
     Scaffold(topBar = {
@@ -67,13 +112,17 @@ fun NumberGuessScreen(
                     updateText(newText)
                 })
 
-                Button(onClick = {}) {
+                Button(onClick = {
+                    onGuess()
+                }) {
                     Text("Arvaa")
                 }
 
                 Text(state.guessText)
 
-                Button(onClick = {}) {
+                Button(onClick = {
+                    onNewGame()
+                }) {
                     Text("Uusi peli")
 
                 }
@@ -88,6 +137,6 @@ fun NumberGuessScreen(
 @Composable
 private fun NumberGuessScreenPreview() {
     R504TL1973004_numeropeli_v1Theme {
-        NumberGuessScreen(state = NumberGuessState(), updateText = {})
+        NumberGuessScreen(state = NumberGuessState(), updateText = {}, onGuess = {}, onNewGame = {})
     }
 }
