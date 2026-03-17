@@ -67,6 +67,7 @@ fun NumberGuessScreen(modifier: Modifier = Modifier, state: NumberGuessState) {
 
                 Button(onClick = {}) {
                     Text("Uusi peli")
+                    // TODO: muista lisätä tähän callback
                 }
 
             }
