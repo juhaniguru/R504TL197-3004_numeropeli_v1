@@ -8,8 +8,17 @@ import java.lang.Exception
 import kotlin.random.Random
 
 class NumberGuessGameViewModel : ViewModel() {
+
+
+
     private val _state = MutableStateFlow(NumberGuessState())
     val state = _state.asStateFlow()
+
+    init {
+        newGame()
+
+    }
+
 
 
     fun updateText(newText: String) {
